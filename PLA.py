@@ -1,9 +1,3 @@
-# read training data
-# init
-# set random sequence
-# run
-# histogram
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -16,12 +10,10 @@ class PLA:
         self.y = data[:, -1]
         f.close()
     
-    def init(self):
+    def init(self, seed=0):
         self.w = np.zeros(np.shape(self.x)[1])
         self.seq = np.arange(np.shape(self.x)[0])
-        self.random_seq(10)
-    
-    def random_seq(self, seed):
+        self.n_update = 0
         np.random.seed(seed)
         np.random.shuffle(self.seq)
     
@@ -32,13 +24,28 @@ class PLA:
             if not (np.inner(self.w, self.x[self.seq[curr]]) > 0) == (self.y[self.seq[curr]] > 0):
                 self.w = self.w + self.y[self.seq[curr]] * self.x[self.seq[curr]]
                 prev = curr
+                self.n_update += 1
             curr = (curr + 1) % np.shape(self.x)[0]
-        print(self.w)
+        # print(self.w)
+    
+    def experiment(self, freq):
+        n_update = []
+        for i in range(freq):
+            self.init(i)
+            self.run()
+            n_update.append(self.n_update)
+
+        print(np.average(np.array(n_update)))
+        plt.hist(n_update)
+        plt.title('Frequency of Number of Updates')
+        plt.xlabel('Number of updates')
+        plt.ylabel('Frequency')
+        plt.show()
 
 
 pla = PLA()
-pla.load_data('testdata.dat')
-pla.init()
-pla.run()
-
+pla.load_data('hw1_6_train.dat')
+# pla.init()
+# pla.run()
+pla.experiment(1126)
 
