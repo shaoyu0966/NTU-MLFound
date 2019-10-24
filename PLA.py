@@ -18,15 +18,15 @@ class PLA:
         np.random.shuffle(self.seq)
     
     def run(self):
-        prev = np.shape(self.x)[0] - 1
+        prev = None
         curr = 0
-        while not curr == prev:
-            if not (np.inner(self.w, self.x[self.seq[curr]]) > 0) == (self.y[self.seq[curr]] > 0):
+        while prev == None or curr != prev:
+            if (np.inner(self.w, self.x[self.seq[curr]]) > 0) != (self.y[self.seq[curr]] > 0):
                 self.w = self.w + self.y[self.seq[curr]] * self.x[self.seq[curr]]
-                prev = curr
                 self.n_update += 1
+                prev = curr
             curr = (curr + 1) % np.shape(self.x)[0]
-        # print(self.w)
+        return self.w
     
     def experiment(self, freq):
         n_update = []
@@ -42,10 +42,9 @@ class PLA:
         plt.ylabel('Frequency')
         plt.show()
 
-
 pla = PLA()
 pla.load_data('hw1_6_train.dat')
-# pla.init()
-# pla.run()
-pla.experiment(1126)
+pla.init()
+print(pla.run())
+# pla.experiment(1126)
 
