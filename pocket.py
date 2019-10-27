@@ -23,12 +23,6 @@ class Pocket:
         self.best_n_mistake = self.mistake()
         np.random.seed(seed)
     
-    def mistake(self):
-        n_mistake = 0
-        for i in range(np.shape(self.train_x)[0]):
-            n_mistake += 1 if ((np.inner(self.w, self.train_x[i]) > 0) != (self.train_y[i] > 0)) else 0
-        return n_mistake
-    
     def run(self, n_update):
         while n_update > 0:
             idx = np.random.randint(np.shape(self.train_x)[0])
@@ -41,9 +35,31 @@ class Pocket:
                     self.best_n_mistake = n_mistake
         return self.w
 
+    def mistake(self):
+        n_mistake = 0
+        for i in range(np.shape(self.train_x)[0]):
+            n_mistake += 1 if ((np.inner(self.w, self.train_x[i]) > 0) != (self.train_y[i] > 0)) else 0
+        return n_mistake
+    
+    def errorRate(self):
+        n_error, total = 0, np.shape(self.test_x)[0]
+        for i in range(total):
+            n_error += 1 if ((np.inner(self.best_w, self.test_x[i]) > 0) != (self.test_y[i] > 0)) else 0
+        return (n_error / total)
+
+    def experiment(self, n_update, n_trial):
+        error_rate = []
+        for i in range(n_trial):
+            self.init(i)
+            self.run(n_update)
+            error_rate.append(self.errorRate())
+        return np.average(error_rate)
+
+
 pocket = Pocket()
 pocket.load_train('hw1_7_train.dat')
 pocket.load_test('hw1_7_test.dat')
-pocket.init()
-print(pocket.run(50))
+# pocket.init()
+# print(pocket.run(50))
+print(pocket.experiment(n_update=100, n_trial=2000))
 
