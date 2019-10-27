@@ -18,33 +18,35 @@ class PLA:
         np.random.shuffle(self.seq)
     
     def run(self):
-        prev = None
-        curr = 0
+        prev, curr = None, 0
         while prev == None or curr != prev:
             if (np.inner(self.w, self.x[self.seq[curr]]) > 0) != (self.y[self.seq[curr]] > 0):
                 self.w = self.w + self.y[self.seq[curr]] * self.x[self.seq[curr]]
                 self.n_update += 1
                 prev = curr
             curr = (curr + 1) % np.shape(self.x)[0]
+        # print(self.n_update)
         return self.w
     
-    def experiment(self, freq):
+    def experiment(self, freq, hist=False):
         n_update = []
         for i in range(freq):
             self.init(i)
             self.run()
             n_update.append(self.n_update)
 
-        print(np.average(np.array(n_update)))
-        plt.hist(n_update)
-        plt.title('Frequency of Number of Updates')
-        plt.xlabel('Number of updates')
-        plt.ylabel('Frequency')
-        plt.show()
+        if hist:
+            plt.hist(n_update)
+            plt.title('Frequency of Number of Updates')
+            plt.xlabel('Number of updates')
+            plt.ylabel('Frequency')
+            plt.show()
+
+        return np.average(np.array(n_update))
 
 pla = PLA()
 pla.load_data('hw1_6_train.dat')
-pla.init()
-print(pla.run())
-# pla.experiment(1126)
+# pla.init()
+# print(pla.run())
+print(pla.experiment(2000, hist=False))
 
