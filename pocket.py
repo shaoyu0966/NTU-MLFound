@@ -41,18 +41,19 @@ class Pocket:
             n_mistake += 1 if ((np.inner(self.w, self.train_x[i]) > 0) != (self.train_y[i] > 0)) else 0
         return n_mistake
     
-    def errorRate(self):
+    def errorRate(self, best=True):
         n_error, total = 0, np.shape(self.test_x)[0]
         for i in range(total):
-            n_error += 1 if ((np.inner(self.best_w, self.test_x[i]) > 0) != (self.test_y[i] > 0)) else 0
+            w = self.best_w if best else self.w
+            n_error += 1 if ((np.inner(w, self.test_x[i]) > 0) != (self.test_y[i] > 0)) else 0
         return (n_error / total)
 
-    def experiment(self, n_update, n_trial, hist=False):
+    def experiment(self, n_update, n_trial, hist=False, best=True):
         error_rate = []
         for i in range(n_trial):
             self.init(i)
             self.run(n_update)
-            error_rate.append(self.errorRate())
+            error_rate.append(self.errorRate(best=best))
 
         if hist:
             plt.hist(error_rate)
@@ -69,5 +70,5 @@ pocket.load_train('hw1_7_train.dat')
 pocket.load_test('hw1_7_test.dat')
 # pocket.init()
 # print(pocket.run(n_update=50))
-print(pocket.experiment(n_update=100, n_trial=1126, hist=True))
+print(pocket.experiment(n_update=100, n_trial=1126, hist=True, best=True))
 
