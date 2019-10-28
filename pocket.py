@@ -47,12 +47,20 @@ class Pocket:
             n_error += 1 if ((np.inner(self.best_w, self.test_x[i]) > 0) != (self.test_y[i] > 0)) else 0
         return (n_error / total)
 
-    def experiment(self, n_update, n_trial):
+    def experiment(self, n_update, n_trial, hist=False):
         error_rate = []
         for i in range(n_trial):
             self.init(i)
             self.run(n_update)
             error_rate.append(self.errorRate())
+
+        if hist:
+            plt.hist(error_rate)
+            plt.title('Pocket: Error Rate')
+            plt.xlabel('Error Rate')
+            plt.ylabel('Frequency')
+            plt.show()
+
         return np.average(error_rate)
 
 
@@ -60,6 +68,6 @@ pocket = Pocket()
 pocket.load_train('hw1_7_train.dat')
 pocket.load_test('hw1_7_test.dat')
 # pocket.init()
-# print(pocket.run(50))
-print(pocket.experiment(n_update=100, n_trial=2000))
+# print(pocket.run(n_update=50))
+print(pocket.experiment(n_update=100, n_trial=1126, hist=True))
 
