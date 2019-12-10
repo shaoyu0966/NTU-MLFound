@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class DicisionStump:
 
@@ -75,20 +76,29 @@ class MultiDimDicisionStump:
         err = (self.test_y != y_predict).sum()
         self.best_Eout =  err / np.shape(self.test_y)
 
+Ein_Eout = []
+for i in range(1000):
+    print(i + 1)
+    ds = DicisionStump()
+    ds.generateData(2000, 0.2, seed=i)
+    ds.dicisionStump()
+    Ein_Eout.append(ds.best_Ein - ds.best_Eout)
 
-mdds = MultiDimDicisionStump()
-mdds.loadData('multi_dim_ds_train.dat')
-mdds.dicisionStump()
-mdds.testing('multi_dim_ds_test.dat')
-print(mdds.best_Ein)
-print(mdds.best_Eout)
+plt.hist(Ein_Eout)
+plt.title('Dicision Stump: Ein - Eout')
+plt.xlabel('Ein - Eout')
+plt.ylabel('Frequency')
+plt.show()
 
+# coursera 19-20
+# mdds = MultiDimDicisionStump()
+# mdds.loadData('multi_dim_ds_train.dat')
+# mdds.dicisionStump()
+# mdds.testing('multi_dim_ds_test.dat')
+# print(mdds.best_Ein)
+# print(mdds.best_Eout)
 
-
-# ds = DicisionStump()
-# ds.generateData(20, 0.2)
-# ds.dicisionStump()
-
+# cousera 17-18
 # Ein = []
 # Eout = []
 # for i in range(5000):
@@ -97,6 +107,5 @@ print(mdds.best_Eout)
 #     ds.dicisionStump()
 #     Ein.append(ds.best_Ein)
 #     Eout.append(ds.best_Eout)
-
 # print(np.average(Ein))
 # print(np.average(Eout))
