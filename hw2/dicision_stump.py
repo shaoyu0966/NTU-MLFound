@@ -73,13 +73,15 @@ class MultiDimDicisionStump:
         s = self.best_theta_s[1]
         y_predict = np.array(list(map(lambda larger: 1 if larger else -1, x > theta))) * s
         err = (self.test_y != y_predict).sum()
-        return err / np.shape(self.test_y)
+        self.best_Eout =  err / np.shape(self.test_y)
 
 
 mdds = MultiDimDicisionStump()
 mdds.loadData('multi_dim_ds_train.dat')
 mdds.dicisionStump()
-print(mdds.testing('multi_dim_ds_test.dat'))
+mdds.testing('multi_dim_ds_test.dat')
+print(mdds.best_Ein)
+print(mdds.best_Eout)
 
 
 
