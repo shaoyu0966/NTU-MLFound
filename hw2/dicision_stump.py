@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 class DicisionStump:
 
@@ -39,7 +40,7 @@ class DicisionStump:
                     self.best_Ein = e_in
         self.best_Eout = self.Eout(self.best_theta_s[0], self.best_theta_s[1])
 
-
+# coursera 19-20
 class MultiDimDicisionStump:
 
     def loadData(self, file_name):
@@ -76,11 +77,15 @@ class MultiDimDicisionStump:
         err = (self.test_y != y_predict).sum()
         self.best_Eout =  err / np.shape(self.test_y)
 
+if len(sys.argv) != 2:
+    print('Execute as \'python3 ./dicision_stump.py <data_size>\'')
+    sys.exit()
+
+data_size = int(sys.argv[1])
 Ein_Eout = []
 for i in range(1000):
-    print(i + 1)
     ds = DicisionStump()
-    ds.generateData(2000, 0.2, seed=i)
+    ds.generateData(data_size, 0.2, seed=i)
     ds.dicisionStump()
     Ein_Eout.append(ds.best_Ein - ds.best_Eout)
 
