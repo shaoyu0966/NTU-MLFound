@@ -1,0 +1,9 @@
+python file 'dicision_stump.py' with 1 command line argument <data_size>
+
+problem 7
+execution:
+python3 ./dicision_stump.py 20
+
+problem 8
+execution:
+python3 ./dicision_stump.py 2000
