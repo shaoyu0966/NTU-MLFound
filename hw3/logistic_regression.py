@@ -15,16 +15,27 @@ class LogisticRegression:
     
     def gradient(self):
         gradient = np.zeros(np.shape(self.x)[1])
-        data_length = np.shape(self.x)[0]
+        data_length = np.shape(self.y)[0]
         for i in range(data_length):
-            gradient += self.sigmoid(-1 * self.y[i] * np.inner(self.w, self.x[i])) * (-1 * self.y[i] * self.x[i])
+            gradient += self.sigmoid(-self.y[i] * np.inner(self.w, self.x[i])) * (-1 * self.y[i] * self.x[i])
         return gradient / data_length
     
-    def logisticRegression(self, step_size, n_iter):
+    # fixed learning rate gradient descent
+    def gradientDescent(self, step_size, n_iter):
         self.w = np.zeros(np.shape(self.x)[1])
         for i in range(n_iter):
-            print('iteration', i)
+            # print('iteration', i)
             self.w -= step_size * self.gradient()
+        return self.w
+    
+    # fixed learning rate stochastic gradient descent with fixed sampling sequence (cyclic)
+    def SGD(self, step_size, n_iter):
+        self.w = np.zeros(np.shape(self.x)[1])
+        data_length = np.shape(self.y)[0]
+        for i in range(n_iter):
+            # print('iteration', i)
+            n = i % data_length
+            self.w += step_size * self.sigmoid(-self.y[n] * np.inner(self.w, self.x[n])) * self.y[n] * self.x[n]
         return self.w
 
     def evaluate(self, test_data):
@@ -43,10 +54,33 @@ class LogisticRegression:
                 n_err += 1
         return n_err / data_length
 
-if __name__ == '__main__':
+
+
+def main_18():
     lr = LogisticRegression()
     lr.load_data('train.dat')
-    w = lr.logisticRegression(0.01, 2000)
+    w = lr.gradientDescent(0.001, 2000)
     Eout = lr.evaluate('test.dat')
     print(w)
     print(Eout)
+
+def main_19():
+    lr = LogisticRegression()
+    lr.load_data('train.dat')
+    w = lr.gradientDescent(0.01, 2000)
+    Eout = lr.evaluate('test.dat')
+    print(w)
+    print(Eout)
+
+def main_20():
+    lr = LogisticRegression()
+    lr.load_data('train.dat')
+    w = lr.SGD(0.001, 2000)
+    Eout = lr.evaluate('test.dat')
+    print(w)
+    print(Eout)
+
+if __name__ == '__main__':
+    # main_18()
+    # main_19()
+    main_20()
