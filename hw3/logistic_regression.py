@@ -126,6 +126,16 @@ def main_7_8(question):
         plt.ylabel('Eout')
         plt.legend()
         plt.show()
+    else:
+        plt.plot(range(n_iter), gd_Eout, 'o', label='Gradient Descent - Eout')
+        plt.plot(range(n_iter), sgd_Eout, 'g', label='SGD - Eout')
+        plt.plot(range(n_iter), gd_Ein, 'r', label='Gradient Descent - Ein')
+        plt.plot(range(n_iter), sgd_Ein, 'b', label='SGD - Ein')
+        plt.title('Ein')
+        plt.xlabel('Iteration')
+        plt.ylabel('Ein')
+        plt.legend()
+        plt.show()
 
 
 if __name__ == '__main__':
